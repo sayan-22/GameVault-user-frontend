@@ -6,7 +6,6 @@ import ScreenshotGallery from "@/components/sections/ScreenshotGallery";
 import Reveal from "@/components/common/Reveal";
 import GameSidebar from "./game-detail/GameSidebar";
 import RequirementsCard from "./game-detail/RequirementsCard";
-import ReviewsList from "./game-detail/ReviewsList";
 
 export default function GameDetailView({ id }: { id: string }) {
   const game = GAMES.find((g) => g.id === id);
@@ -71,12 +70,6 @@ export default function GameDetailView({ id }: { id: string }) {
             <RequirementsCard label="Minimum" data={game.systemRequirements.minimum} />
             <RequirementsCard label="Recommended" data={game.systemRequirements.recommended} accent />
           </div>
-        </Section>
-      </Reveal>
-
-      <Reveal>
-        <Section title="Reviews">
-          <ReviewsList reviews={game.reviews} />
         </Section>
       </Reveal>
     </div>

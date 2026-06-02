@@ -62,6 +62,9 @@ export default function ProfileMenu() {
             <Link href="/cart" className="block rounded-md px-3 py-2 text-sm text-text-secondary hover:bg-card hover:text-text">
               Cart
             </Link>
+            <Link href="/order-history" className="block rounded-md px-3 py-2 text-sm text-text-secondary hover:bg-card hover:text-text">
+              Order history
+            </Link>
             <button
               type="button"
               onClick={handleLogoutClick}

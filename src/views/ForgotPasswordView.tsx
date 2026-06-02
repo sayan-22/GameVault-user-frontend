@@ -4,11 +4,28 @@ import { useState } from "react";
 import AuthCard from "@/components/cards/AuthCard";
 import Inputfield from "@/components/form/Inputfield";
 import CommonButton from "@/components/buttons/CommonButton";
+import { apiPost } from "@/utils/api";
 
 export default function ForgotPasswordView() {
   const [email, setEmail] = useState("");
   const [pending, setPending] = useState(false);
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const sendResetLink = async () => {
+    if (!email.trim()) return;
+    setError(null);
+    setPending(true);
+    try {
+      // POST /api/user/auth/forgot-password — backend emails a reset link.
+      await apiPost("/user/auth/forgot-password", { email: email.trim() });
+      setSent(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong.");
+    } finally {
+      setPending(false);
+    }
+  };
 
   return (
     <AuthCard
@@ -46,22 +63,18 @@ export default function ForgotPasswordView() {
             </p>
           </div>
           <CommonButton
-            text="Resend link"
+            text={pending ? "Resending…" : "Resend link"}
             variant="default"
+            loading={pending}
             className="h-11 w-full text-sm"
-            onClick={() => setSent(false)}
+            onClick={sendResetLink}
           />
         </div>
       ) : (
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            if (!email.trim()) return;
-            setPending(true);
-            window.setTimeout(() => {
-              setPending(false);
-              setSent(true);
-            }, 900);
+            void sendResetLink();
           }}
           className="space-y-4"
         >
@@ -73,6 +86,7 @@ export default function ForgotPasswordView() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@example.com"
             autoComplete="email"
+            error={error ?? undefined}
             required
           />
           <CommonButton
