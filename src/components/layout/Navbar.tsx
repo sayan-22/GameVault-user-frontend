@@ -7,6 +7,7 @@ import { cn } from "@/utils/cn";
 import SearchBar from "./SearchBar";
 import Logo from "./Logo";
 import ProfileMenu from "./ProfileMenu";
+import { useAppSelector } from "@/store/hooks";
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
@@ -15,29 +16,16 @@ const NAV_LINKS = [
 
 export default function Navbar() {
   const pathname = usePathname();
-  const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
 
-  const cartCount = 0;
+  const cartCount = useAppSelector((s) => s.cart.items.length);
 
   return (
-    <header
-      className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-all duration-300",
-        scrolled ? "glass-navbar border-b border-border/60" : "bg-navbar/40 backdrop-blur-md",
-      )}
-    >
+    <header className="relative z-50 border-b border-border/60 bg-transparent">
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:gap-6 sm:px-6 lg:px-8">
         <Logo />
         <nav className="hidden items-center gap-1 md:flex">

@@ -1,18 +1,23 @@
-import { notFound } from "next/navigation";
+"use client";
+
 import type { ReactNode } from "react";
-import { GAMES } from "@/constants/game";
+import type { Game } from "@/constants/game";
 import GameTrailer from "@/components/sections/GameTrailer";
 import ScreenshotGallery from "@/components/sections/ScreenshotGallery";
 import Reveal from "@/components/common/Reveal";
 import GameSidebar from "./game-detail/GameSidebar";
 import RequirementsCard from "./game-detail/RequirementsCard";
+import { useAppSelector } from "@/store/hooks";
+import { useGamePolling } from "@/hooks/useGamesPolling";
 
-export default function GameDetailView({ id }: { id: string }) {
-  const game = GAMES.find((g) => g.id === id);
-  if (!game) notFound();
+export default function GameDetailView({ initialGame }: { initialGame: Game }) {
+  useGamePolling(initialGame.id);
+  const current = useAppSelector((s) => s.games.current);
+  // Use the live store value only when it's this page's game; else the SSR data.
+  const game = current && current.id === initialGame.id ? current : initialGame;
 
   return (
-    <div className="-mt-16 flex flex-col gap-12 pb-20">
+    <div className="flex flex-col gap-12 pb-20">
       <section className="relative isolate w-full overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center opacity-30 blur-2xl"
@@ -58,28 +63,33 @@ export default function GameDetailView({ id }: { id: string }) {
         </Section>
       </Reveal>
 
-      <Reveal>
-        <Section title="Screenshots">
-          <ScreenshotGallery shots={game.screenshots} />
-        </Section>
-      </Reveal>
+      {game.screenshots.length > 0 && (
+        <Reveal>
+          <Section title="Screenshots">
+            <ScreenshotGallery shots={game.screenshots} />
+          </Section>
+        </Reveal>
+      )}
 
-      <Reveal>
-        <Section title="System Requirements">
-          <div className="grid gap-4 sm:grid-cols-2">
-            <RequirementsCard label="Minimum" data={game.systemRequirements.minimum} />
-            <RequirementsCard label="Recommended" data={game.systemRequirements.recommended} accent />
-          </div>
-        </Section>
-      </Reveal>
+      {(Object.keys(game.systemRequirements.minimum).length > 0 ||
+        Object.keys(game.systemRequirements.recommended).length > 0) && (
+        <Reveal>
+          <Section title="System Requirements">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <RequirementsCard label="Minimum" data={game.systemRequirements.minimum} />
+              <RequirementsCard label="Recommended" data={game.systemRequirements.recommended} accent />
+            </div>
+          </Section>
+        </Reveal>
+      )}
     </div>
   );
 }
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section className="px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
+    <section>
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <h2 className="mb-4 text-xl font-semibold tracking-tight text-text sm:text-2xl">{title}</h2>
         {children}
       </div>

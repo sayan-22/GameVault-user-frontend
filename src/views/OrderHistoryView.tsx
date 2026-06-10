@@ -1,7 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect } from "react";
 import type { Order, OrderStatus } from "@/constants/order";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { fetchOrders } from "@/store/ordersSlice";
 
 const STATUS_STYLES: Record<OrderStatus, string> = {
   paid: "border-success/40 bg-success/10 text-success",
@@ -28,20 +31,43 @@ function formatDate(iso: string): string {
   }).format(new Date(iso));
 }
 
-export default function OrderHistoryView({ orders }: { orders: Order[] }) {
+export default function OrderHistoryView() {
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((s) => s.auth.user);
+  const authLoading = useAppSelector((s) => s.auth.loading);
+  const orders = useAppSelector((s) => s.orders.items);
+  const loading = useAppSelector((s) => s.orders.loading);
+  const error = useAppSelector((s) => s.orders.error);
+
+  const userId = user?.id;
+  useEffect(() => {
+    if (authLoading || !userId) return;
+    dispatch(fetchOrders());
+  }, [authLoading, userId, dispatch]);
+
+  if (!authLoading && !user) return <SignInPrompt />;
+
   return (
-    <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
       <header className="mb-8 animate-fade-up">
         <p className="text-xs uppercase tracking-widest text-cyan">Account</p>
         <h1 className="mt-2 text-3xl font-bold tracking-tight text-text sm:text-4xl">
           Order history
         </h1>
         <p className="mt-1 text-sm text-text-secondary">
-          {orders.length} {orders.length === 1 ? "order" : "orders"}
+          {loading
+            ? "Loading…"
+            : `${orders.length} ${orders.length === 1 ? "order" : "orders"}`}
         </p>
       </header>
 
-      {orders.length === 0 ? (
+      {error ? (
+        <p className="rounded-lg border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger">
+          {error}
+        </p>
+      ) : loading ? (
+        <OrdersLoading />
+      ) : orders.length === 0 ? (
         <EmptyOrders />
       ) : (
         <ul className="flex flex-col gap-4">
@@ -101,6 +127,37 @@ function OrderCard({ order }: { order: Order }) {
         </span>
       </div>
     </li>
+  );
+}
+
+function OrdersLoading() {
+  return (
+    <ul className="flex flex-col gap-4">
+      {[0, 1, 2].map((i) => (
+        <li
+          key={i}
+          className="h-40 animate-pulse rounded-2xl border border-border bg-card"
+        />
+      ))}
+    </ul>
+  );
+}
+
+function SignInPrompt() {
+  return (
+    <div className="mx-auto max-w-xl px-4 py-32 text-center">
+      <h1 className="text-2xl font-bold text-text">Sign in to see your orders</h1>
+      <p className="mt-2 text-sm text-text-secondary">
+        Your order history is tied to your account. Sign in to view your
+        purchases and their status.
+      </p>
+      <Link
+        href="/login"
+        className="mt-6 inline-flex items-center gap-2 rounded-lg bg-cyan px-5 py-2.5 text-sm font-semibold text-bg shadow-[0_0_24px_-4px_rgba(0,217,255,0.6)]"
+      >
+        Sign in
+      </Link>
+    </div>
   );
 }
 

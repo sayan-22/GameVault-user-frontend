@@ -1,9 +1,14 @@
+"use client";
+
 import Link from "next/link";
 import GameCard from "@/components/cards/GameCard";
 import Reveal from "@/components/common/Reveal";
-import { GAMES, CATEGORIES, type Game } from "@/constants/game";
-import { byPriceAsc, byPriceDesc, byReleaseDesc, byReviewsDesc } from "@/utils/sort";
+import { type Game } from "@/constants/game";
+import { deriveCategories } from "@/services/games";
+import { byPriceAsc, byPriceDesc, byReleaseDesc } from "@/utils/sort";
 import { cn } from "@/utils/cn";
+import { useAppSelector } from "@/store/hooks";
+import { useGamesPolling } from "@/hooks/useGamesPolling";
 
 export type BrowseFilters = {
   cat?: string;
@@ -11,21 +16,33 @@ export type BrowseFilters = {
   sort?: string;
 };
 
-function applyFilters({ cat, filter, sort }: BrowseFilters): Game[] {
-  let list = [...GAMES];
+function applyFilters(games: Game[], { cat, filter, sort }: BrowseFilters): Game[] {
+  let list = [...games];
   if (cat) list = list.filter((g) => g.tags.map((t) => t.toLowerCase()).includes(cat.toLowerCase()));
   if (filter === "free") list = list.filter((g) => g.free);
   if (filter === "discount") list = list.filter((g) => (g.discount ?? 0) > 0);
   if (sort === "new") list.sort(byReleaseDesc);
-  if (sort === "trending") list.sort(byReviewsDesc);
+  if (sort === "trending") list = list.filter((g) => g.trending);
   if (sort === "price-asc") list.sort(byPriceAsc);
   if (sort === "price-desc") list.sort(byPriceDesc);
   return list;
 }
 
-export default function BrowseView({ filters }: { filters: BrowseFilters }) {
+export default function BrowseView({
+  initialGames,
+  filters,
+}: {
+  initialGames: Game[];
+  filters: BrowseFilters;
+}) {
+  useGamesPolling(initialGames);
+  const loaded = useAppSelector((s) => s.games.loaded);
+  const storeGames = useAppSelector((s) => s.games.items);
+  const games = loaded ? storeGames : initialGames;
+
   const { cat, filter, sort } = filters;
-  const list = applyFilters(filters);
+  const list = applyFilters(games, filters);
+  const categories = deriveCategories(games);
   const activeChip = cat ?? (filter === "free" ? "Free" : filter === "discount" ? "Deals" : sort ?? "All");
 
   return (
@@ -45,7 +62,7 @@ export default function BrowseView({ filters }: { filters: BrowseFilters }) {
         <Chip href="/browse?sort=new" label="New" active={sort === "new"} />
         <Chip href="/browse?sort=trending" label="Trending" active={sort === "trending"} />
         <span className="mx-2 h-5 w-px bg-border" />
-        {CATEGORIES.map((c) => (
+        {categories.map((c) => (
           <Chip
             key={c.slug}
             href={`/browse?cat=${c.name}`}

@@ -4,8 +4,12 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import ConfirmModal from "@/components/modal/ConfirmModal";
 import Popover from "@/components/popover/Popover";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { logout } from "@/store/authSlice";
 
 export default function ProfileMenu() {
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((s) => s.auth.user);
   const [open, setOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
@@ -16,12 +20,11 @@ export default function ProfileMenu() {
     setLogoutOpen(true);
   };
 
-  const handleLogoutConfirm = () => {
+  const handleLogoutConfirm = async () => {
     setLoggingOut(true);
-    window.setTimeout(() => {
-      setLoggingOut(false);
-      setLogoutOpen(false);
-    }, 700);
+    await dispatch(logout());
+    setLoggingOut(false);
+    setLogoutOpen(false);
   };
 
   return (
@@ -49,29 +52,40 @@ export default function ProfileMenu() {
           className="w-56"
         >
           <div className="border-b border-border-soft px-4 py-3">
-            <p className="text-sm font-medium text-text">Guest</p>
-            <p className="text-xs text-text-muted">Not signed in</p>
+            <p className="text-sm font-medium text-text">
+              {user ? user.name : "Guest"}
+            </p>
+            <p className="text-xs text-text-muted">
+              {user ? user.email : "Not signed in"}
+            </p>
           </div>
           <div className="p-1">
-            <Link href="/login" className="block rounded-md px-3 py-2 text-sm text-text-secondary hover:bg-card hover:text-text">
-              Sign in
-            </Link>
-            <Link href="/signup" className="block rounded-md px-3 py-2 text-sm text-text-secondary hover:bg-card hover:text-text">
-              Create account
-            </Link>
-            <Link href="/cart" className="block rounded-md px-3 py-2 text-sm text-text-secondary hover:bg-card hover:text-text">
-              Cart
-            </Link>
-            <Link href="/order-history" className="block rounded-md px-3 py-2 text-sm text-text-secondary hover:bg-card hover:text-text">
-              Order history
-            </Link>
-            <button
-              type="button"
-              onClick={handleLogoutClick}
-              className="block w-full rounded-md px-3 py-2 text-left text-sm text-danger hover:bg-card"
-            >
-              Log out
-            </button>
+            {user ? (
+              <>
+                <Link href="/cart" className="block rounded-md px-3 py-2 text-sm text-text-secondary hover:bg-card hover:text-text">
+                  Cart
+                </Link>
+                <Link href="/order-history" className="block rounded-md px-3 py-2 text-sm text-text-secondary hover:bg-card hover:text-text">
+                  Order history
+                </Link>
+                <button
+                  type="button"
+                  onClick={handleLogoutClick}
+                  className="block w-full rounded-md px-3 py-2 text-left text-sm text-danger hover:bg-card"
+                >
+                  Log out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link href="/login" className="block rounded-md px-3 py-2 text-sm text-text-secondary hover:bg-card hover:text-text">
+                  Sign in
+                </Link>
+                <Link href="/signup" className="block rounded-md px-3 py-2 text-sm text-text-secondary hover:bg-card hover:text-text">
+                  Create account
+                </Link>
+              </>
+            )}
           </div>
         </Popover>
       </div>

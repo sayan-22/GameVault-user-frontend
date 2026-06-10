@@ -1,9 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import type { Game } from "@/constants/game";
 import { cn } from "@/utils/cn";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { addItem } from "@/store/cartSlice";
 import CardBadge from "./CardBadge";
 import PriceTag from "./PriceTag";
 
@@ -23,10 +26,27 @@ export default function GameCard({ game, variant = "vertical", priority, classNa
 }
 
 function VerticalCard({ game, priority, className }: Pick<Props, "game" | "priority" | "className">) {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((s) => s.auth.user);
+  const items = useAppSelector((s) => s.cart.items);
+  const pendingId = useAppSelector((s) => s.cart.pendingId);
   const [hover, setHover] = useState(false);
   const [trailerReady, setTrailerReady] = useState(false);
-  const [added, setAdded] = useState(false);
+  const added = items.some((g) => g.id === game.id);
+  const pending = pendingId === game.id;
   const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  const onAdd = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+    if (added || pending) return;
+    dispatch(addItem(game.id));
+  };
 
   useEffect(() => {
     const v = videoRef.current;
@@ -77,16 +97,11 @@ function VerticalCard({ game, priority, className }: Pick<Props, "game" | "prior
         <CardBadge free={game.free} discount={game.discount} className="absolute left-2 top-2" size="md" />
         <button
           type="button"
-          aria-label={added ? "Added to cart" : "Add to cart"}
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setAdded(true);
-            window.setTimeout(() => setAdded(false), 1400);
-          }}
+          aria-label={added ? "In cart" : "Add to cart"}
+          onClick={onAdd}
           className={cn(
             "absolute right-2 top-2 grid h-8 w-8 place-items-center rounded-lg border backdrop-blur-md transition-all duration-300",
-            hover ? "translate-y-0 opacity-100" : "-translate-y-1 opacity-0",
+            hover || added ? "translate-y-0 opacity-100" : "-translate-y-1 opacity-0",
             added
               ? "border-success bg-success/90 text-bg"
               : "border-cyan-border bg-bg/70 text-cyan hover:bg-cyan hover:text-bg",

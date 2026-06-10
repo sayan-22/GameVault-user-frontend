@@ -1,10 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import AuthCard from "@/components/cards/AuthCard";
 import Inputfield from "@/components/form/Inputfield";
 import CommonButton from "@/components/buttons/CommonButton";
 import { cn } from "@/utils/cn";
+import { useAppDispatch } from "@/store/hooks";
+import { signup } from "@/store/authSlice";
+import { signupSchema, fieldErrors } from "@/schemas/auth";
 
 function scorePassword(p: string): number {
   let s = 0;
@@ -16,11 +20,37 @@ function scorePassword(p: string): number {
 }
 
 export default function SignupView() {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [agree, setAgree] = useState(false);
   const [pending, setPending] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [formError, setFormError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormError(null);
+    if (!agree) return;
+
+    const parsed = signupSchema.safeParse({ name, email, password });
+    if (!parsed.success) {
+      setErrors(fieldErrors(parsed.error));
+      return;
+    }
+    setErrors({});
+    setPending(true);
+    const res = await dispatch(signup(parsed.data));
+    if (signup.rejected.match(res)) {
+      setFormError(res.payload ?? "Sign up failed");
+      setPending(false);
+      return;
+    }
+    router.push("/");
+    router.refresh();
+  };
 
   const strength = scorePassword(password);
   const strengthClass = (i: number) => {
@@ -38,15 +68,12 @@ export default function SignupView() {
       altHref="/login"
       altCta="Sign in"
     >
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (!agree) return;
-          setPending(true);
-          window.setTimeout(() => setPending(false), 900);
-        }}
-        className="space-y-4"
-      >
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {formError ? (
+          <p className="rounded-lg border border-danger/40 bg-danger/10 px-3 py-2 text-xs text-danger">
+            {formError}
+          </p>
+        ) : null}
         <Inputfield
           label="Display name"
           name="name"
@@ -54,6 +81,7 @@ export default function SignupView() {
           onChange={(e) => setName(e.target.value)}
           placeholder="Your name"
           autoComplete="name"
+          error={errors.name}
           required
         />
         <Inputfield
@@ -64,6 +92,7 @@ export default function SignupView() {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@example.com"
           autoComplete="email"
+          error={errors.email}
           required
         />
         <div>
@@ -73,9 +102,10 @@ export default function SignupView() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="At least 8 characters"
+            placeholder="At least 6 characters"
             autoComplete="new-password"
-            minLength={8}
+            minLength={6}
+            error={errors.password}
             required
           />
           <div className="mt-2 flex gap-1.5">

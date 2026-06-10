@@ -25,18 +25,20 @@ export default function Hero({ game }: { game: Game }) {
           className="absolute inset-0 bg-cover bg-center transition-opacity duration-700"
           style={{ backgroundImage: `url(${game.banner})`, opacity: ready ? 0 : 1 }}
         />
-        <video
-          ref={videoRef}
-          src={game.heroVideo ?? game.trailer}
-          poster={game.banner}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          onCanPlay={() => setReady(true)}
-          className="absolute inset-0 h-full w-full object-cover"
-        />
+        {game.heroVideo && (
+          <video
+            ref={videoRef}
+            src={game.heroVideo}
+            poster={game.banner}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            onCanPlay={() => setReady(true)}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        )}
         <div className="absolute inset-0 bg-linear-to-t from-bg via-bg/60 to-bg/20" />
         <div className="absolute inset-0 bg-linear-to-r from-bg/85 via-bg/40 to-transparent" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(0,217,255,0.08),transparent_60%)]" />

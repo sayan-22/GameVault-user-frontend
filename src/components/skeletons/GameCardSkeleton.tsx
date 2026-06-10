@@ -13,16 +13,14 @@ export default function GameCardSkeleton() {
 
 export function GameRowSkeleton({ title }: { title: string }) {
   return (
-    <section className="px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
+    <section>
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-4 flex items-end justify-between">
           <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-text">{title}</h2>
         </div>
-        <div className="scrollbar-hide -mx-4 flex gap-4 overflow-x-auto px-4 pb-2 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="w-55 flex-none sm:w-60">
-              <GameCardSkeleton />
-            </div>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <GameCardSkeleton key={i} />
           ))}
         </div>
       </div>

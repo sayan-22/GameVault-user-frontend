@@ -4,22 +4,43 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { Game } from "@/constants/game";
 import { discountedPrice, formatPrice } from "@/utils/price";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { removeItem, checkout } from "@/store/cartSlice";
 import PriceTag from "@/components/cards/PriceTag";
 import CartSummary from "./cart/CartSummary";
 import EmptyCart from "./cart/EmptyCart";
 
-export default function CartView({ initialItems }: { initialItems: Game[] }) {
-  const [items, setItems] = useState<Game[]>(initialItems);
-  const [promoApplied, setPromoApplied] = useState(false);
+export default function CartView() {
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((s) => s.auth.user);
+  const authLoading = useAppSelector((s) => s.auth.loading);
+  const items = useAppSelector((s) => s.cart.items);
+  const loading = useAppSelector((s) => s.cart.loading);
+  const pendingId = useAppSelector((s) => s.cart.pendingId);
+  const [checkingOut, setCheckingOut] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const subtotal = useMemo(() => items.reduce((s, g) => s + discountedPrice(g), 0), [items]);
-  const discount = promoApplied ? subtotal * 0.1 : 0;
-  const tax = (subtotal - discount) * 0.08;
-  const total = Math.max(0, subtotal - discount + tax);
+  const subtotal = useMemo(
+    () => items.reduce((s, g) => s + discountedPrice(g), 0),
+    [items]
+  );
 
+  // Auth must resolve before we can tell signed-out from empty-cart.
+  if (!authLoading && !user) return <SignInPrompt />;
+  if ((authLoading || loading) && items.length === 0) return <CartLoading />;
   if (items.length === 0) return <EmptyCart />;
 
-  const remove = (id: string) => setItems((xs) => xs.filter((g) => g.id !== id));
+  const onCheckout = async () => {
+    setError(null);
+    setCheckingOut(true);
+    const res = await dispatch(checkout());
+    if (checkout.fulfilled.match(res)) {
+      window.location.href = res.payload; // hand off to Stripe
+    } else {
+      setError(res.payload ?? "Checkout failed");
+      setCheckingOut(false);
+    }
+  };
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
@@ -34,25 +55,36 @@ export default function CartView({ initialItems }: { initialItems: Game[] }) {
       <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
         <ul className="flex flex-col gap-3">
           {items.map((g) => (
-            <CartItem key={g.id} game={g} onRemove={() => remove(g.id)} />
+            <CartItem
+              key={g.id}
+              game={g}
+              removing={pendingId === g.id}
+              onRemove={() => dispatch(removeItem(g.id))}
+            />
           ))}
         </ul>
         <CartSummary
           subtotal={subtotal}
-          discount={discount}
-          tax={tax}
-          total={total}
-          promoApplied={promoApplied}
-          onPromoApply={(code) => {
-            if (code.trim().toUpperCase() === "GAMEVAULT10") setPromoApplied(true);
-          }}
+          total={subtotal}
+          count={items.length}
+          checkingOut={checkingOut}
+          error={error}
+          onCheckout={onCheckout}
         />
       </div>
     </div>
   );
 }
 
-function CartItem({ game, onRemove }: { game: Game; onRemove: () => void }) {
+function CartItem({
+  game,
+  removing,
+  onRemove,
+}: {
+  game: Game;
+  removing: boolean;
+  onRemove: () => void;
+}) {
   return (
     <li className="group flex gap-4 rounded-2xl border border-border bg-card p-4 transition-all hover:border-cyan-border">
       <Link href={`/game/${game.id}`} className="flex-none">
@@ -75,13 +107,47 @@ function CartItem({ game, onRemove }: { game: Game; onRemove: () => void }) {
       <button
         type="button"
         onClick={onRemove}
+        disabled={removing}
         aria-label={`Remove ${game.title}`}
-        className="grid h-8 w-8 place-items-center self-start rounded-lg text-text-muted transition-colors hover:bg-bg-secondary hover:text-danger"
+        className="grid h-8 w-8 place-items-center self-start rounded-lg text-text-muted transition-colors hover:bg-bg-secondary hover:text-danger disabled:opacity-50"
       >
         <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" aria-hidden>
           <path d="M3 6h18M8 6V4h8v2M6 6l1 14a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-14M10 11v6M14 11v6" />
         </svg>
       </button>
     </li>
+  );
+}
+
+function SignInPrompt() {
+  return (
+    <div className="mx-auto max-w-xl px-4 py-32 text-center">
+      <h1 className="text-2xl font-bold text-text">Sign in to view your cart</h1>
+      <p className="mt-2 text-sm text-text-secondary">
+        Your cart is tied to your account. Sign in to add games and check out.
+      </p>
+      <Link
+        href="/login"
+        className="mt-6 inline-flex items-center gap-2 rounded-lg bg-cyan px-5 py-2.5 text-sm font-semibold text-bg shadow-[0_0_24px_-4px_rgba(0,217,255,0.6)]"
+      >
+        Sign in
+      </Link>
+    </div>
+  );
+}
+
+function CartLoading() {
+  return (
+    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <div className="h-10 w-48 animate-pulse rounded-lg bg-card" />
+      <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_380px]">
+        <div className="flex flex-col gap-3">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="h-32 animate-pulse rounded-2xl border border-border bg-card" />
+          ))}
+        </div>
+        <div className="h-72 animate-pulse rounded-2xl border border-border bg-card" />
+      </div>
+    </div>
   );
 }

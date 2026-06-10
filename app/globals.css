@@ -52,6 +52,36 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Every clickable element shows a pointer cursor — app-wide, so existing AND
+   future components are covered (native <button>/[role=button] otherwise show
+   the default arrow). Disabled controls are intentionally NOT touched here, so
+   any existing `cursor-not-allowed` styling stays exactly as set. */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+a[href],
+summary,
+select:not(:disabled),
+label[for],
+input[type="checkbox"]:not(:disabled),
+input[type="radio"]:not(:disabled),
+input[type="submit"]:not(:disabled),
+input[type="button"]:not(:disabled),
+input[type="reset"]:not(:disabled),
+input[type="file"]:not(:disabled) {
+  cursor: pointer;
+}
+
+/* Scrollbars hidden app-wide — scrolling still works (wheel / touch / keys). */
+* {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE / old Edge */
+}
+*::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none; /* Chrome / Safari / Edge */
+}
+
 ::selection {
   background: var(--color-cyan);
   color: #000;

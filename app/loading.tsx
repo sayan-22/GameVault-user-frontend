@@ -2,7 +2,7 @@ import { GameRowSkeleton } from "@/components/skeletons/GameCardSkeleton";
 
 export default function Loading() {
   return (
-    <div className="-mt-16 flex flex-col gap-14 pb-20 sm:gap-16">
+    <div className="flex flex-col gap-14 pb-20 sm:gap-16">
       <section className="relative aspect-video max-h-[80vh] min-h-120 w-full overflow-hidden">
         <div className="absolute inset-0 skeleton" />
         <div className="absolute inset-0 bg-linear-to-t from-bg via-bg/60 to-bg/20" />
