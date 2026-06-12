@@ -5,6 +5,7 @@ import Hero from "@/components/sections/Hero";
 import GameRow from "@/components/sections/GameRow";
 import Reveal from "@/components/common/Reveal";
 import CategoryCard from "@/components/cards/CategoryCard";
+import BouncyText from "@/components/common/BouncyText";
 import GameCard from "@/components/cards/GameCard";
 import DealCard from "@/components/cards/DealCard";
 import { type Game } from "@/constants/game";
@@ -39,16 +40,16 @@ export default function HomeView({ initialGames }: { initialGames: Game[] }) {
       <Hero game={hero} />
       {trending.length > 0 && (
         <Reveal>
-          <GameRow title="Trending Now" games={trending} viewAllHref="/browse?sort=trending" />
+          <GameRow title="Trending Now" games={trending} viewAllHref="/browse?sort=trending" sparkle />
         </Reveal>
       )}
       {free.length > 0 && (
         <Reveal>
-          <GameRow title="Free to Play" games={free} viewAllHref="/browse?filter=free" />
+          <GameRow title="Free to Play" games={free} viewAllHref="/browse?filter=free" bouncy />
         </Reveal>
       )}
       <Reveal>
-        <GameRow title="New Releases" games={newReleases} viewAllHref="/browse?sort=new" />
+        <GameRow title="New Releases" games={newReleases} viewAllHref="/browse?sort=new" bouncy />
       </Reveal>
 
       {categories.length > 0 && (
@@ -56,7 +57,9 @@ export default function HomeView({ initialGames }: { initialGames: Game[] }) {
           <section>
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="mb-4 flex items-end justify-between gap-4">
-                <h2 className="text-xl font-semibold tracking-tight text-text sm:text-2xl">Categories</h2>
+                <h2 className="text-xl font-semibold tracking-tight text-text sm:text-2xl">
+                  <BouncyText text="Categories" />
+                </h2>
                 <Link
                   href="/browse"
                   className="text-xs font-medium text-text-muted transition-colors hover:text-cyan"
@@ -85,7 +88,9 @@ export default function HomeView({ initialGames }: { initialGames: Game[] }) {
           <section>
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="mb-4 flex items-end justify-between gap-4">
-                <h2 className="text-xl font-semibold tracking-tight text-text sm:text-2xl">Featured Discounts</h2>
+                <h2 className="text-xl font-semibold tracking-tight text-text sm:text-2xl">
+                  <BouncyText text="Featured Discounts" />
+                </h2>
               </div>
               <div className="grid auto-rows-[180px] grid-cols-1 gap-3 md:grid-cols-3 md:grid-rows-2">
                 <DealCard game={deal} className={cn("col-span-1 md:col-span-2 md:row-span-2")} />

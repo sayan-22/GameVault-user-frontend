@@ -49,7 +49,9 @@ export default function BrowseView({
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
       <header className="mb-8 animate-fade-up">
         <p className="text-xs uppercase tracking-widest text-cyan">Catalog</p>
-        <h1 className="mt-2 text-3xl font-bold tracking-tight text-text sm:text-4xl">Browse Games</h1>
+        <h1 className="mt-2 text-3xl font-bold tracking-tight text-text sm:text-4xl">
+          <span className="inflate-text">Browse Games</span>
+        </h1>
         <p className="mt-2 max-w-xl text-sm text-text-secondary">
           Filter by genre, discounts, or what&apos;s new. The full library, no fluff.
         </p>

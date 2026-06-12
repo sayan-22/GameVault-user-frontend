@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import type { Game } from "@/constants/game";
 import PriceTag from "@/components/cards/PriceTag";
+import WordFlyIn from "@/components/common/WordFlyIn";
 
 export default function Hero({ game }: { game: Game }) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -59,10 +60,10 @@ export default function Hero({ game }: { game: Game }) {
               ))}
             </div>
             <h1 className="text-balance text-4xl font-bold leading-[1.05] tracking-tight text-text sm:text-5xl lg:text-6xl">
-              {game.title}
+              <WordFlyIn text={game.title} />
             </h1>
             <p className="mt-4 max-w-xl text-balance text-base text-text-secondary sm:text-lg">
-              {game.description}
+              <WordFlyIn text={game.description} delay={0.8} stagger={0.07} />
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-3 sm:gap-4">
               <Link

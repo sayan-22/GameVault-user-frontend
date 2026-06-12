@@ -48,7 +48,7 @@ export default function LoginView() {
       altHref="/signup"
       altCta="Create an account"
     >
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
         {formError ? (
           <p className="rounded-lg border border-danger/40 bg-danger/10 px-3 py-2 text-xs text-danger">
             {formError}
@@ -61,7 +61,7 @@ export default function LoginView() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@example.com"
-          autoComplete="email"
+          autoComplete="off"
           error={errors.email}
           required
         />
@@ -72,7 +72,7 @@ export default function LoginView() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="••••••••"
-          autoComplete="current-password"
+          autoComplete="new-password"
           error={errors.password}
           required
         />
