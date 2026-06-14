@@ -72,7 +72,7 @@ export default function Inputfield({
   const padRight = type === "password" && Icon ? "pr-20" : type === "password" || Icon ? "pr-10" : "";
 
   return (
-    <div className="w-full relative">
+    <div className="w-full">
       {label ? (
         <div className="mb-1.5 flex items-center justify-between">
           <label
@@ -90,6 +90,7 @@ export default function Inputfield({
           </label>
         </div>
       ) : null}
+      <div className="relative">
       <input
         ref={ref}
         id={resolvedId}
@@ -133,6 +134,7 @@ export default function Inputfield({
           {showPassword ? <EyeOffIcon /> : <EyeIcon />}
         </button>
       ) : null}
+      </div>
     </div>
   );
 }

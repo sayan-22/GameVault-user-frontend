@@ -22,8 +22,16 @@ export default function HomeView({ initialGames }: { initialGames: Game[] }) {
   // SSR + first hydration use the server data; once seeded, the live store drives.
   const games = loaded ? storeGames : initialGames;
 
-  // Feature the game with an uploaded Hero Auto-Play video; fall back to the first game.
-  const hero = games.find((g) => g.heroVideo) ?? games[0];
+  // Feature the game whose Hero Auto-Play video was set most recently
+  // (heroVideoUpdatedAt bumps ONLY when the hero video itself changes — editing
+  // the trailer or other fields does not move the Hero). Falls back to the
+  // first game if none has a hero video yet.
+  const hero =
+    [...games]
+      .filter((g) => g.heroVideo)
+      .sort((a, b) =>
+        (b.heroVideoUpdatedAt ?? "").localeCompare(a.heroVideoUpdatedAt ?? "")
+      )[0] ?? games[0];
   // Trending is admin-curated: a game shows here only when its `trending` flag is on.
   const trending = games.filter((g) => g.trending).slice(0, 8);
   const free = games.filter((g) => g.free);

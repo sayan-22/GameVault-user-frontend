@@ -28,6 +28,8 @@ export type ApiGame = {
   developer: string;
   publisher: string;
   releaseDate: string;
+  updatedAt?: string;
+  heroVideoUpdatedAt?: string;
   screenshots: string[];
   trending?: boolean;
   rating: number;
@@ -63,6 +65,8 @@ export function mapGame(g: ApiGame): Game {
     developer: g.developer,
     publisher: g.publisher,
     releaseDate: g.releaseDate,
+    updatedAt: g.updatedAt,
+    heroVideoUpdatedAt: g.heroVideoUpdatedAt,
     screenshots: g.screenshots ?? [],
     rating: g.rating,
     reviewCount: g.reviewCount,

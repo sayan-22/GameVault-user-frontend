@@ -16,6 +16,8 @@ export type Game = {
   developer: string;
   publisher: string;
   releaseDate: string;
+  updatedAt?: string;
+  heroVideoUpdatedAt?: string;
   screenshots: string[];
   trending?: boolean;
   rating: number;
