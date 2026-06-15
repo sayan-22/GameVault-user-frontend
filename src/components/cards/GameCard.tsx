@@ -7,6 +7,7 @@ import type { Game } from "@/constants/game";
 import { cn } from "@/utils/cn";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { addItem } from "@/store/cartSlice";
+import IconButton from "@/components/buttons/IconButton";
 import CardBadge from "./CardBadge";
 import PriceTag from "./PriceTag";
 
@@ -95,12 +96,11 @@ function VerticalCard({ game, priority, className }: Pick<Props, "game" | "prior
         />
         <div className="absolute inset-0 bg-linear-to-t from-card via-card/30 to-transparent opacity-90" />
         <CardBadge free={game.free} discount={game.discount} className="absolute left-2 top-2" size="md" />
-        <button
-          type="button"
-          aria-label={added ? "In cart" : "Add to cart"}
+        <IconButton
+          ariaLabel={added ? "In cart" : "Add to cart"}
           onClick={onAdd}
           className={cn(
-            "absolute right-2 top-2 grid h-8 w-8 place-items-center rounded-lg border backdrop-blur-md transition-all duration-300",
+            "absolute right-2 top-2 h-8 w-8 backdrop-blur-md transition-all duration-300",
             hover || added ? "translate-y-0 opacity-100" : "-translate-y-1 opacity-0",
             added
               ? "border-success bg-success/90 text-bg"
@@ -116,7 +116,7 @@ function VerticalCard({ game, priority, className }: Pick<Props, "game" | "prior
               <path d="M12 5v14M5 12h14" />
             </svg>
           )}
-        </button>
+        </IconButton>
       </div>
       <div className="relative space-y-2 p-3">
         <p className="truncate text-[11px] uppercase tracking-wider text-text-muted">{game.tags[0]}</p>

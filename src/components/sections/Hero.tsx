@@ -1,10 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import type { Game } from "@/constants/game";
 import PriceTag from "@/components/cards/PriceTag";
 import WordFlyIn from "@/components/common/WordFlyIn";
+import CommonButton from "@/components/buttons/CommonButton";
+import OutlineButton from "@/components/buttons/OutlineButton";
 
 export default function Hero({ game }: { game: Game }) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -66,27 +67,31 @@ export default function Hero({ game }: { game: Game }) {
               <WordFlyIn text={game.description} delay={0.8} stagger={0.07} />
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-3 sm:gap-4">
-              <Link
+              <CommonButton
                 href={`/game/${game.id}`}
-                className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-cyan px-6 py-3 text-sm font-semibold text-bg shadow-[0_0_24px_-4px_rgba(0,217,255,0.6)] transition-all hover:scale-[1.02] hover:shadow-[0_0_40px_-2px_rgba(0,217,255,0.85)]"
-              >
-                <span className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-white/40 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden>
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-                {game.free ? "Play Free" : "Buy Now"}
-              </Link>
-              <Link
+                text={game.free ? "Play Free" : "Buy Now"}
+                variant="theme"
+                Icon={PlayIcon}
+                className="px-6 py-3 text-sm"
+              />
+              <OutlineButton
                 href={`/game/${game.id}`}
-                className="inline-flex items-center gap-2 rounded-lg border border-border bg-bg-secondary/60 px-6 py-3 text-sm font-medium text-text-secondary backdrop-blur transition-all hover:border-cyan-border hover:text-text"
-              >
-                More info
-              </Link>
+                text="More info"
+                className="rounded-lg bg-bg-secondary/60 px-6 py-3 text-sm backdrop-blur"
+              />
               {!game.free && <PriceTag game={game} size="md" className="pl-2" />}
             </div>
           </div>
         </div>
       </div>
     </section>
+  );
+}
+
+function PlayIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
+      <path d="M8 5v14l11-7z" />
+    </svg>
   );
 }

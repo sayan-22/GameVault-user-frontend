@@ -1,11 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import type { Game } from "@/constants/game";
 import PriceTag from "@/components/cards/PriceTag";
 import CommonButton from "@/components/buttons/CommonButton";
+import OutlineButton from "@/components/buttons/OutlineButton";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { addItem } from "@/store/cartSlice";
 import { fetchOrders } from "@/store/ordersSlice";
@@ -72,12 +72,11 @@ export default function GameSidebar({ game }: { game: Game }) {
                 className="h-11 w-full text-sm"
                 Icon={already ? CheckIcon : CartIcon}
               />
-              <Link
+              <OutlineButton
                 href="/cart"
-                className="block rounded-lg border border-border bg-bg-secondary/60 px-4 py-2.5 text-center text-sm font-medium text-text-secondary transition-colors hover:border-cyan-border hover:text-text"
-              >
-                View cart
-              </Link>
+                text="View cart"
+                className="w-full rounded-lg bg-bg-secondary/60 px-4 py-2.5 text-sm"
+              />
             </>
           )}
         </div>

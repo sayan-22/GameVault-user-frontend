@@ -1,81 +1,67 @@
 "use client";
 
+import Link from "next/link";
 import { memo, type ComponentType } from "react";
 import { cn } from "@/utils/cn";
 
 const NOOP = () => {};
 
-type Variant = "theme" | "success" | "danger" | "dark" | "neutral" | "simple";
-
-const VARIANTS: Record<Variant, { base: string; active: string }> = {
-  theme: {
-    base: "border-cyan-border text-cyan hover:bg-cyan hover:text-bg",
-    active: "bg-cyan text-bg",
-  },
-  success: {
-    base: "border-success text-success hover:bg-success hover:text-bg",
-    active: "bg-success text-bg",
-  },
-  danger: {
-    base: "border-danger text-danger hover:bg-danger hover:text-text",
-    active: "bg-danger text-text",
-  },
-  dark: {
-    base: "border-text text-text bg-text-muted/[0.08] hover:bg-text hover:text-bg",
-    active: "bg-text text-bg",
-  },
-  neutral: {
-    base: "border-text-muted text-text-muted bg-text-muted/[0.08] hover:bg-text-muted hover:text-bg",
-    active: "bg-text-muted text-bg",
-  },
-  simple: {
-    base: "border-border text-text hover:border-cyan-border hover:text-cyan",
-    active: "bg-cyan text-bg border-cyan-border",
-  },
-};
-
 type IconProps = { className?: string };
 
 type OutlineButtonProps = {
   text: string;
+  href?: string;
   onClick?: () => void;
   active?: boolean;
   className?: string;
   Icon?: ComponentType<IconProps>;
-  variant?: Variant;
   iconPosition?: "left" | "right";
   type?: "button" | "submit";
   disabled?: boolean;
 };
 
+// Single outline style (used for "More info", filter chips, etc.). Renders a
+// Next <Link> when `href` is given, otherwise a <button>. Size/shape/background
+// come from `className` so callers control those without class conflicts.
 function OutlineButton({
   text,
+  href,
   onClick = NOOP,
   active,
-  className = "h-10 w-fit text-sm px-4",
+  className = "h-10 w-fit rounded-lg px-4 text-sm",
   Icon,
-  variant = "theme",
   iconPosition = "right",
   type = "button",
   disabled,
 }: OutlineButtonProps) {
-  return (
-    <button
-      type={type}
-      onClick={onClick}
-      disabled={disabled}
-      className={cn(
-        "flex items-center justify-center gap-2 border rounded-lg duration-300 ease-out",
-        "font-semibold truncate capitalize bg-transparent",
-        "disabled:opacity-40 disabled:cursor-not-allowed",
-        VARIANTS[variant].base,
-        active ? VARIANTS[variant].active : "",
-        className,
-      )}
-    >
+  const classes = cn(
+    "inline-flex items-center justify-center gap-2 border font-medium transition-all duration-300 ease-out",
+    "disabled:opacity-40 disabled:cursor-not-allowed",
+    active
+      ? "border-cyan-border bg-cyan/15 text-cyan"
+      : "border-border text-text-secondary hover:border-cyan-border hover:text-text",
+    className,
+  );
+
+  const content = (
+    <>
       {Icon && iconPosition === "left" ? <Icon className="h-4 w-4" /> : null}
       {text}
       {Icon && iconPosition === "right" ? <Icon className="h-4 w-4" /> : null}
+    </>
+  );
+
+  if (href) {
+    return (
+      <Link href={href} className={classes}>
+        {content}
+      </Link>
+    );
+  }
+
+  return (
+    <button type={type} onClick={onClick} disabled={disabled} className={classes}>
+      {content}
     </button>
   );
 }

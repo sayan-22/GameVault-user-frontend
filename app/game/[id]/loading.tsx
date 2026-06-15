@@ -17,7 +17,7 @@ export default function Loading() {
           </div>
           <aside>
             <div className="overflow-hidden rounded-2xl border border-border bg-card">
-              <div className="aspect-[3/4] w-full skeleton" />
+              <div className="aspect-3/4 w-full skeleton" />
               <div className="space-y-3 p-5">
                 <div className="h-6 w-24 rounded skeleton" />
                 <div className="h-11 w-full rounded-lg skeleton" />

@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import type { Order, OrderStatus } from "@/constants/order";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchOrders } from "@/store/ordersSlice";
+import CommonButton from "@/components/buttons/CommonButton";
 
 const STATUS_STYLES: Record<OrderStatus, string> = {
   paid: "border-success/40 bg-success/10 text-success",
@@ -151,12 +152,12 @@ function SignInPrompt() {
         Your order history is tied to your account. Sign in to view your
         purchases and their status.
       </p>
-      <Link
+      <CommonButton
         href="/login"
-        className="mt-6 inline-flex items-center gap-2 rounded-lg bg-cyan px-5 py-2.5 text-sm font-semibold text-bg shadow-[0_0_24px_-4px_rgba(0,217,255,0.6)]"
-      >
-        Sign in
-      </Link>
+        text="Sign in"
+        variant="theme"
+        className="mx-auto mt-6 w-fit px-5 py-2.5 text-sm"
+      />
     </div>
   );
 }
@@ -183,12 +184,12 @@ function EmptyOrders() {
       <p className="mt-1 max-w-sm text-sm text-text-secondary">
         When you buy a game it&apos;ll show up here with its receipt and status.
       </p>
-      <Link
+      <CommonButton
         href="/browse"
-        className="mt-6 rounded-lg border border-cyan-border bg-cyan px-5 py-2.5 text-sm font-semibold text-bg transition-all hover:bg-cyan-glow"
-      >
-        Browse games
-      </Link>
+        text="Browse games"
+        variant="theme"
+        className="mx-auto mt-6 w-fit px-5 py-2.5 text-sm"
+      />
     </div>
   );
 }

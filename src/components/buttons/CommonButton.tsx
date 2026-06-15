@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { memo, type ComponentType } from "react";
 import { cn } from "@/utils/cn";
 
@@ -30,6 +31,7 @@ type IconProps = { className?: string };
 
 type CommonButtonProps = {
   text: string;
+  href?: string;
   onClick?: () => void;
   type?: "button" | "submit";
   className?: string;
@@ -41,6 +43,7 @@ type CommonButtonProps = {
 };
 
 function CommonButton({
+  href,
   onClick = NOOP,
   type = "button",
   className = "h-10 w-fit text-sm px-4",
@@ -51,20 +54,17 @@ function CommonButton({
   disabled,
   active = false,
 }: CommonButtonProps) {
-  return (
-    <button
-      onClick={onClick}
-      type={type}
-      disabled={disabled || loading}
-      className={cn(
-        "relative flex items-center justify-center gap-2 rounded-lg border duration-300 ease-out capitalize overflow-hidden",
-        "font-semibold truncate",
-        "disabled:opacity-70 disabled:cursor-not-allowed",
-        VARIANTS[variant].base,
-        active ? VARIANTS[variant].active : "",
-        className,
-      )}
-    >
+  const classes = cn(
+    "relative flex items-center justify-center gap-2 rounded-lg border duration-300 ease-out capitalize overflow-hidden",
+    "font-semibold truncate",
+    "disabled:opacity-70 disabled:cursor-not-allowed",
+    VARIANTS[variant].base,
+    active ? VARIANTS[variant].active : "",
+    className,
+  );
+
+  const content = (
+    <>
       <span className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 hover:translate-x-full" />
       {Icon ? <Icon className="h-4 w-4" /> : null}
       <span className={cn("relative", loading ? "opacity-0" : "opacity-100")}>{text}</span>
@@ -73,6 +73,25 @@ function CommonButton({
           <span className="block size-5 rounded-full border-2 border-white border-t-white/20 animate-spin" />
         </span>
       ) : null}
+    </>
+  );
+
+  if (href) {
+    return (
+      <Link href={href} onClick={onClick} className={classes}>
+        {content}
+      </Link>
+    );
+  }
+
+  return (
+    <button
+      onClick={onClick}
+      type={type}
+      disabled={disabled || loading}
+      className={classes}
+    >
+      {content}
     </button>
   );
 }

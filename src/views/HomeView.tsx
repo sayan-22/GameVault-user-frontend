@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import Hero from "@/components/sections/Hero";
 import GameRow from "@/components/sections/GameRow";
 import Reveal from "@/components/common/Reveal";
@@ -8,6 +7,7 @@ import CategoryCard from "@/components/cards/CategoryCard";
 import BouncyText from "@/components/common/BouncyText";
 import GameCard from "@/components/cards/GameCard";
 import DealCard from "@/components/cards/DealCard";
+import LinkButton from "@/components/buttons/LinkButton";
 import { type Game } from "@/constants/game";
 import { deriveCategories } from "@/services/games";
 import { byDiscountDesc, byReleaseDesc } from "@/utils/sort";
@@ -68,12 +68,7 @@ export default function HomeView({ initialGames }: { initialGames: Game[] }) {
                 <h2 className="text-xl font-semibold tracking-tight text-text sm:text-2xl">
                   <BouncyText text="Categories" />
                 </h2>
-                <Link
-                  href="/browse"
-                  className="text-xs font-medium text-text-muted transition-colors hover:text-cyan"
-                >
-                  Explore by genre →
-                </Link>
+                <LinkButton href="/browse" text="Explore by genre →" />
               </div>
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
                 {categories.map((c) => (

@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { formatPrice } from "@/utils/price";
 import CommonButton from "@/components/buttons/CommonButton";
+import LinkButton from "@/components/buttons/LinkButton";
 
 type Props = {
   subtotal: number;
@@ -50,12 +50,9 @@ export default function CartSummary({
           Icon={ArrowRightIcon}
         />
 
-        <Link
-          href="/browse"
-          className="mt-3 block text-center text-xs text-text-secondary hover:text-cyan"
-        >
-          Continue shopping
-        </Link>
+        <div className="mt-3 text-center">
+          <LinkButton href="/browse" text="Continue shopping" />
+        </div>
 
         <p className="mt-4 text-[11px] leading-relaxed text-text-muted">
           You&apos;ll be redirected to Stripe to complete your purchase securely.

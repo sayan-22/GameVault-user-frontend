@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRef, useState } from "react";
 import ConfirmModal from "@/components/modal/ConfirmModal";
+import IconButton from "@/components/buttons/IconButton";
 import Popover from "@/components/popover/Popover";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { logout } from "@/store/authSlice";
@@ -30,19 +31,18 @@ export default function ProfileMenu() {
   return (
     <>
       <div className="relative">
-        <button
+        <IconButton
           ref={triggerRef}
-          type="button"
-          aria-label="Profile"
-          aria-expanded={open}
+          ariaLabel="Profile"
+          ariaExpanded={open}
           onClick={() => setOpen((v) => !v)}
-          className="grid h-10 w-10 cursor-pointer place-items-center rounded-lg border border-border bg-card/60 text-text-secondary transition-all hover:border-cyan-border hover:text-cyan hover:shadow-[0_0_18px_-6px_rgba(0,217,255,0.55)]"
+          className="h-10 w-10 cursor-pointer border-border bg-card/60 text-text-secondary transition-all hover:border-cyan-border hover:text-cyan hover:shadow-[0_0_18px_-6px_rgba(0,217,255,0.55)]"
         >
           <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
             <circle cx="12" cy="8" r="4" />
             <path d="M4 21a8 8 0 0 1 16 0" />
           </svg>
-        </button>
+        </IconButton>
 
         <Popover
           open={open}

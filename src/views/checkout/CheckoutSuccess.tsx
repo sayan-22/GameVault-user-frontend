@@ -1,9 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "@/store/hooks";
 import { confirmCheckout, fetchCart } from "@/store/cartSlice";
+import CommonButton from "@/components/buttons/CommonButton";
+import OutlineButton from "@/components/buttons/OutlineButton";
 
 export default function CheckoutSuccess({ sessionId }: { sessionId?: string }) {
   const dispatch = useAppDispatch();
@@ -39,18 +40,17 @@ export default function CheckoutSuccess({ sessionId }: { sessionId?: string }) {
           : "Thanks for your purchase! Your order is now in your order history."}
       </p>
       <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-        <Link
+        <CommonButton
           href="/order-history"
-          className="rounded-lg bg-cyan px-5 py-2.5 text-sm font-semibold text-bg shadow-[0_0_24px_-4px_rgba(0,217,255,0.6)]"
-        >
-          View order history
-        </Link>
-        <Link
+          text="View order history"
+          variant="theme"
+          className="w-full px-5 py-2.5 text-sm sm:w-fit"
+        />
+        <OutlineButton
           href="/browse"
-          className="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-text-secondary transition-colors hover:border-cyan-border hover:text-text"
-        >
-          Keep browsing
-        </Link>
+          text="Keep browsing"
+          className="w-full rounded-lg bg-card px-5 py-2.5 text-sm sm:w-fit"
+        />
       </div>
     </div>
   );

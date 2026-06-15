@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import GameCard from "@/components/cards/GameCard";
+import OutlineButton from "@/components/buttons/OutlineButton";
 import Reveal from "@/components/common/Reveal";
 import { type Game } from "@/constants/game";
 import { deriveCategories } from "@/services/games";
@@ -100,16 +101,11 @@ export default function BrowseView({
 
 function Chip({ href, label, active }: { href: string; label: string; active: boolean }) {
   return (
-    <Link
+    <OutlineButton
       href={href}
-      className={cn(
-        "rounded-full border px-3 py-1.5 text-xs font-medium transition-all",
-        active
-          ? "border-cyan-border bg-cyan/15 text-cyan shadow-[0_0_18px_-6px_rgba(0,217,255,0.55)]"
-          : "border-border bg-card/60 text-text-secondary hover:border-cyan-border hover:text-text",
-      )}
-    >
-      {label}
-    </Link>
+      text={label}
+      active={active}
+      className={cn("rounded-full px-3 py-1.5 text-xs", !active && "bg-card/60")}
+    />
   );
 }

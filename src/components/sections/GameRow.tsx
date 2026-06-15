@@ -1,6 +1,6 @@
-import Link from "next/link";
 import GameCard from "@/components/cards/GameCard";
 import BouncyText from "@/components/common/BouncyText";
+import LinkButton from "@/components/buttons/LinkButton";
 import type { Game } from "@/constants/game";
 import { cn } from "@/utils/cn";
 
@@ -29,14 +29,7 @@ export default function GameRow({ title, games, viewAllHref, sparkle, bouncy }: 
           >
             {bouncy ? <BouncyText text={title} /> : title}
           </h2>
-          {viewAllHref && (
-            <Link
-              href={viewAllHref}
-              className="text-xs font-medium text-text-secondary transition-colors hover:text-cyan"
-            >
-              View all →
-            </Link>
-          )}
+          {viewAllHref && <LinkButton href={viewAllHref} text="View all →" />}
         </div>
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {shown.map((g, i) => (

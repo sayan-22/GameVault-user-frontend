@@ -7,6 +7,7 @@ import { discountedPrice, formatPrice } from "@/utils/price";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { removeItem, checkout } from "@/store/cartSlice";
 import PriceTag from "@/components/cards/PriceTag";
+import CommonButton from "@/components/buttons/CommonButton";
 import CartSummary from "./cart/CartSummary";
 import EmptyCart from "./cart/EmptyCart";
 
@@ -126,12 +127,12 @@ function SignInPrompt() {
       <p className="mt-2 text-sm text-text-secondary">
         Your cart is tied to your account. Sign in to add games and check out.
       </p>
-      <Link
+      <CommonButton
         href="/login"
-        className="mt-6 inline-flex items-center gap-2 rounded-lg bg-cyan px-5 py-2.5 text-sm font-semibold text-bg shadow-[0_0_24px_-4px_rgba(0,217,255,0.6)]"
-      >
-        Sign in
-      </Link>
+        text="Sign in"
+        variant="theme"
+        className="mx-auto mt-6 w-fit px-5 py-2.5 text-sm"
+      />
     </div>
   );
 }

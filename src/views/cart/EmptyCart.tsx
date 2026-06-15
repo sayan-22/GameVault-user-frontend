@@ -1,4 +1,4 @@
-import Link from "next/link";
+import CommonButton from "@/components/buttons/CommonButton";
 
 export default function EmptyCart() {
   return (
@@ -14,12 +14,12 @@ export default function EmptyCart() {
       <p className="mt-2 text-sm text-text-secondary">
         Find your next favorite game and we&apos;ll keep your library ready.
       </p>
-      <Link
+      <CommonButton
         href="/browse"
-        className="mt-6 inline-flex items-center gap-2 rounded-lg bg-cyan px-5 py-2.5 text-sm font-semibold text-bg shadow-[0_0_24px_-4px_rgba(0,217,255,0.6)]"
-      >
-        Browse games
-      </Link>
+        text="Browse games"
+        variant="theme"
+        className="mx-auto mt-6 w-fit px-5 py-2.5 text-sm"
+      />
     </div>
   );
 }

@@ -100,10 +100,9 @@ export default function ConfirmModal({
         <div className="flex gap-2 border-t border-border-soft bg-bg-secondary/40 p-4">
           <OutlineButton
             text={cancelText}
-            variant="neutral"
             onClick={onClose}
             disabled={loading}
-            className="h-10 flex-1 text-sm"
+            className="h-10 flex-1 rounded-lg px-4 text-sm"
           />
           <CommonButton
             text={confirmText}

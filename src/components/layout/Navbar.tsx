@@ -7,6 +7,7 @@ import { cn } from "@/utils/cn";
 import SearchBar from "./SearchBar";
 import Logo from "./Logo";
 import ProfileMenu from "./ProfileMenu";
+import IconButton from "@/components/buttons/IconButton";
 import { useAppSelector } from "@/store/hooks";
 
 const NAV_LINKS = [
@@ -53,10 +54,10 @@ export default function Navbar() {
           <div className="hidden max-w-md flex-1 sm:block">
             <SearchBar />
           </div>
-          <Link
+          <IconButton
             href="/cart"
-            aria-label="Cart"
-            className="relative grid h-10 w-10 place-items-center rounded-lg border border-border bg-card/60 text-text-secondary transition-all hover:border-cyan-border hover:text-cyan hover:shadow-[0_0_18px_-6px_rgba(0,217,255,0.55)]"
+            ariaLabel="Cart"
+            className="relative h-10 w-10 border-border bg-card/60 text-text-secondary transition-all hover:border-cyan-border hover:text-cyan hover:shadow-[0_0_18px_-6px_rgba(0,217,255,0.55)]"
           >
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
               <path d="M3 4h2l2.6 11.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6" />
@@ -68,18 +69,17 @@ export default function Navbar() {
                 {cartCount}
               </span>
             )}
-          </Link>
+          </IconButton>
           <ProfileMenu />
-          <button
-            type="button"
-            aria-label="Menu"
+          <IconButton
+            ariaLabel="Menu"
             onClick={() => setMobileOpen((v) => !v)}
-            className="grid h-10 w-10 place-items-center rounded-lg border border-border bg-card/60 text-text-secondary md:hidden"
+            className="h-10 w-10 border-border bg-card/60 text-text-secondary md:hidden"
           >
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" aria-hidden>
               {mobileOpen ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M3 6h18M3 12h18M3 18h18" />}
             </svg>
-          </button>
+          </IconButton>
         </div>
       </div>
 
