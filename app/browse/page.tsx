@@ -1,7 +1,7 @@
 import BrowseView from "@/views/BrowseView";
-import { getGames } from "@/services/games";
+import { getGames } from "@/lib/services/games";
 
-export default async function Page({
+export default async function BrowsePage({
   searchParams,
 }: {
   searchParams: Promise<{ cat?: string; filter?: string; sort?: string }>;

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { Game } from "@/constants/game";
+import type { Game } from "@/constants";
 import { cn } from "@/utils/cn";
 import CardBadge from "./CardBadge";
 import PriceTag from "./PriceTag";

@@ -1,7 +1,7 @@
 import HomeView from "@/views/HomeView";
-import { getGames } from "@/services/games";
+import { getGames } from "@/lib/services/games";
 
-export default async function Page() {
+export default async function HomePage() {
   const games = await getGames();
   return <HomeView initialGames={games} />;
 }

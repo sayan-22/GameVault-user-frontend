@@ -1,7 +1,7 @@
-import GameCard from "@/components/cards/GameCard";
-import BouncyText from "@/components/common/BouncyText";
-import LinkButton from "@/components/buttons/LinkButton";
-import type { Game } from "@/constants/game";
+import { GameCard } from "@/components/cards";
+import { BouncyText } from "@/components/common";
+import { LinkButton } from "@/components/buttons";
+import type { Game } from "@/constants";
 import { cn } from "@/utils/cn";
 
 type Props = {

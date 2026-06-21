@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function NotFound() {
+export default function GameNotFound() {
   return (
     <div className="mx-auto max-w-xl px-4 py-32 text-center">
       <p className="text-xs uppercase tracking-widest text-cyan">404</p>

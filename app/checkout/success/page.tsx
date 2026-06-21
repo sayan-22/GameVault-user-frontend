@@ -1,6 +1,6 @@
-import CheckoutSuccess from "@/views/checkout/CheckoutSuccess";
+import CheckoutSuccess from "@/views/CheckoutSuccess";
 
-export default async function Page({
+export default async function CheckoutSuccessPage({
   searchParams,
 }: {
   searchParams: Promise<{ session_id?: string }>;

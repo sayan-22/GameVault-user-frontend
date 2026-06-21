@@ -1,6 +1,6 @@
 import ResetPasswordView from "@/views/ResetPasswordView";
 
-export default async function Page({
+export default async function ResetPasswordPage({
   searchParams,
 }: {
   searchParams: Promise<{ token?: string }>;

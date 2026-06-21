@@ -3,8 +3,7 @@
 import { useEffect, useState, type ComponentType, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { cn } from "@/utils/cn";
-import CommonButton from "@/components/buttons/CommonButton";
-import OutlineButton from "@/components/buttons/OutlineButton";
+import { CommonButton, OutlineButton } from "@/components/buttons";
 
 type Tone = "theme" | "danger" | "success";
 

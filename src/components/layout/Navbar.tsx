@@ -7,8 +7,8 @@ import { cn } from "@/utils/cn";
 import SearchBar from "./SearchBar";
 import Logo from "./Logo";
 import ProfileMenu from "./ProfileMenu";
-import IconButton from "@/components/buttons/IconButton";
-import { useAppSelector } from "@/store/hooks";
+import { IconButton } from "@/components/buttons";
+import { useAppSelector } from "@/lib/store/hooks";
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },

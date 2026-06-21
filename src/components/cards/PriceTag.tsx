@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { cn } from "@/utils/cn";
 import { discountedPrice, formatPrice } from "@/utils/price";
-import type { Game } from "@/constants/game";
+import type { Game } from "@/constants";
 
 type Props = {
   game: Pick<Game, "price" | "discount" | "free">;

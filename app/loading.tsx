@@ -1,6 +1,6 @@
-import { GameRowSkeleton } from "@/components/skeletons/GameCardSkeleton";
+import { GameRowSkeleton } from "@/components/skeletons";
 
-export default function Loading() {
+export default function RootLoading() {
   return (
     <div className="flex flex-col gap-14 pb-20 sm:gap-16">
       <section className="relative aspect-video max-h-[80vh] min-h-120 w-full overflow-hidden">

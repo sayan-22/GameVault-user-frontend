@@ -1,0 +1,120 @@
+"use client";
+
+import { Hero, GameRow } from "@/components/sections";
+import { Reveal, BouncyText } from "@/components/common";
+import { CategoryCard, GameCard, DealCard } from "@/components/cards";
+import { LinkButton } from "@/components/buttons";
+import { type Game } from "@/constants";
+import { deriveCategories } from "@/lib/services/games";
+import { byDiscountDesc, byReleaseDesc } from "@/utils/sort";
+import { cn } from "@/utils/cn";
+import { useAppSelector } from "@/lib/store/hooks";
+import { useGamesPolling } from "@/lib/hooks/useGamesPolling";
+
+export default function HomeView({ initialGames }: { initialGames: Game[] }) {
+  useGamesPolling(initialGames);
+  const loaded = useAppSelector((s) => s.games.loaded);
+  const storeGames = useAppSelector((s) => s.games.items);
+  // SSR + first hydration use the server data; once seeded, the live store drives.
+  const games = loaded ? storeGames : initialGames;
+
+  // Feature the game whose Hero Auto-Play video was set most recently
+  // (heroVideoUpdatedAt bumps ONLY when the hero video itself changes — editing
+  // the trailer or other fields does not move the Hero). Falls back to the
+  // first game if none has a hero video yet.
+  const hero =
+    [...games]
+      .filter((g) => g.heroVideo)
+      .sort((a, b) =>
+        (b.heroVideoUpdatedAt ?? "").localeCompare(a.heroVideoUpdatedAt ?? "")
+      )[0] ?? games[0];
+  // Trending is admin-curated: a game shows here only when its `trending` flag is on.
+  const trending = games.filter((g) => g.trending).slice(0, 8);
+  const free = games.filter((g) => g.free);
+  const newReleases = [...games].sort(byReleaseDesc).slice(0, 8);
+  const discounted = games.filter((g) => (g.discount ?? 0) > 0).sort(byDiscountDesc);
+  const [deal, ...sideDeals] = discounted;
+  // Top 4 genres only, so the section stays one fixed row as more genres appear.
+  const categories = deriveCategories(games).slice(0, 4);
+
+  if (!hero) return <EmptyStore />;
+
+  return (
+    <div className="flex flex-col gap-14 pb-20 sm:gap-16">
+      <Hero game={hero} />
+      {trending.length > 0 && (
+        <Reveal>
+          <GameRow title="Trending Now" games={trending} viewAllHref="/browse?sort=trending" sparkle />
+        </Reveal>
+      )}
+      {free.length > 0 && (
+        <Reveal>
+          <GameRow title="Free to Play" games={free} viewAllHref="/browse?filter=free" bouncy />
+        </Reveal>
+      )}
+      <Reveal>
+        <GameRow title="New Releases" games={newReleases} viewAllHref="/browse?sort=new" bouncy />
+      </Reveal>
+
+      {categories.length > 0 && (
+        <Reveal>
+          <section>
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div className="mb-4 flex items-end justify-between gap-4">
+                <h2 className="text-xl font-semibold tracking-tight text-text sm:text-2xl">
+                  <BouncyText text="Categories" />
+                </h2>
+                <LinkButton href="/browse" text="Explore by genre →" />
+              </div>
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+                {categories.map((c) => (
+                  <CategoryCard
+                    key={c.slug}
+                    name={c.name}
+                    image={c.image}
+                    count={c.count}
+                    href={`/browse?cat=${c.name}`}
+                  />
+                ))}
+              </div>
+            </div>
+          </section>
+        </Reveal>
+      )}
+
+      {deal && (
+        <Reveal>
+          <section>
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div className="mb-4 flex items-end justify-between gap-4">
+                <h2 className="text-xl font-semibold tracking-tight text-text sm:text-2xl">
+                  <BouncyText text="Featured Discounts" />
+                </h2>
+              </div>
+              <div className="grid auto-rows-[180px] grid-cols-1 gap-3 md:grid-cols-3 md:grid-rows-2">
+                <DealCard game={deal} className={cn("col-span-1 md:col-span-2 md:row-span-2")} />
+                {sideDeals.slice(0, 2).map((g) => (
+                  <GameCard key={g.id} game={g} variant="compact" />
+                ))}
+              </div>
+            </div>
+          </section>
+        </Reveal>
+      )}
+    </div>
+  );
+}
+
+function EmptyStore() {
+  return (
+    <div className="mx-auto flex min-h-[60vh] max-w-md flex-col items-center justify-center px-4 text-center">
+      <h1 className="text-2xl font-bold tracking-tight text-text">
+        No games yet
+      </h1>
+      <p className="mt-2 text-sm text-text-secondary">
+        The catalog is empty right now. Once games are published they&apos;ll
+        appear here.
+      </p>
+    </div>
+  );
+}

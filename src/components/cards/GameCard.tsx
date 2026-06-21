@@ -3,11 +3,11 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import type { Game } from "@/constants/game";
+import type { Game } from "@/constants";
 import { cn } from "@/utils/cn";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { addItem } from "@/store/cartSlice";
-import IconButton from "@/components/buttons/IconButton";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { addItem } from "@/lib/store/cartSlice";
+import { IconButton } from "@/components/buttons";
 import CardBadge from "./CardBadge";
 import PriceTag from "./PriceTag";
 

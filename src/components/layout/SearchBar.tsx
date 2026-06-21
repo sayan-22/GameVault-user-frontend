@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import type { Game } from "@/constants/game";
-import { searchGames } from "@/services/games";
-import Inputfield from "@/components/form/Inputfield";
-import Popover from "@/components/popover/Popover";
+import type { Game } from "@/constants";
+import { searchGames } from "@/lib/services/games";
+import { Inputfield } from "@/components/form";
+import { Popover } from "@/components/popover";
 
 const DEBOUNCE_MS = 250;
 const MAX_RESULTS = 6;

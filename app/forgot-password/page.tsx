@@ -1,5 +1,5 @@
 import ForgotPasswordView from "@/views/ForgotPasswordView";
 
-export default function Page() {
+export default function ForgotPasswordPage() {
   return <ForgotPasswordView />;
 }

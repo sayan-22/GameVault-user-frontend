@@ -1,4 +1,4 @@
-import type { Game } from "@/constants/game";
+import type { Game } from "@/constants";
 
 export function discountedPrice(game: Pick<Game, "price" | "discount" | "free">): number {
   if (game.free) return 0;

@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function NotFound() {
+export default function RootNotFound() {
   return (
     <div className="relative isolate flex min-h-[calc(100vh-4rem)] items-center justify-center overflow-hidden px-6">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,rgba(0,217,255,0.10),transparent_55%),radial-gradient(ellipse_at_bottom,rgba(33,199,229,0.06),transparent_60%)]" />

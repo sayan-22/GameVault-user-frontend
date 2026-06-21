@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { Game } from "@/constants/game";
-import PriceTag from "@/components/cards/PriceTag";
-import WordFlyIn from "@/components/common/WordFlyIn";
-import CommonButton from "@/components/buttons/CommonButton";
-import OutlineButton from "@/components/buttons/OutlineButton";
+import type { Game } from "@/constants";
+import { PriceTag } from "@/components/cards";
+import { WordFlyIn } from "@/components/common";
+import { CommonButton, OutlineButton } from "@/components/buttons";
 
 export default function Hero({ game }: { game: Game }) {
   const videoRef = useRef<HTMLVideoElement | null>(null);

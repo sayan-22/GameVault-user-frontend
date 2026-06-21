@@ -1,4 +1,4 @@
-export default function Loading() {
+export default function GameLoading() {
   return (
     <div className="flex flex-col gap-12 pb-20">
       <section className="relative overflow-hidden pt-28 lg:pt-32">

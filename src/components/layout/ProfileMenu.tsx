@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import { useRef, useState } from "react";
-import ConfirmModal from "@/components/modal/ConfirmModal";
-import IconButton from "@/components/buttons/IconButton";
-import Popover from "@/components/popover/Popover";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { logout } from "@/store/authSlice";
+import { ConfirmModal } from "@/components/modal";
+import { IconButton } from "@/components/buttons";
+import { Popover } from "@/components/popover";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { logout } from "@/lib/store/authSlice";
 
 export default function ProfileMenu() {
   const dispatch = useAppDispatch();

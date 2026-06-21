@@ -1,4 +1,4 @@
-import type { Game } from "@/constants/game";
+import type { Game } from "@/constants";
 
 export const byReleaseDesc = (a: Game, b: Game) => b.releaseDate.localeCompare(a.releaseDate);
 export const byDiscountDesc = (a: Game, b: Game) => (b.discount ?? 0) - (a.discount ?? 0);

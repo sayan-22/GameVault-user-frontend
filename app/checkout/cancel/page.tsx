@@ -1,7 +1,6 @@
-import CommonButton from "@/components/buttons/CommonButton";
-import OutlineButton from "@/components/buttons/OutlineButton";
+import { CommonButton, OutlineButton } from "@/components/buttons";
 
-export default function Page() {
+export default function CheckoutCancelPage() {
   return (
     <div className="mx-auto flex min-h-[70vh] max-w-md flex-col items-center justify-center px-4 text-center">
       <span className="grid h-16 w-16 place-items-center rounded-2xl border border-border bg-card text-text-muted">
