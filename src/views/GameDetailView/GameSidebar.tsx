@@ -26,7 +26,7 @@ export default function GameSidebar({ game }: { game: Game }) {
   // Owned ONLY when the game is in a PAID order on this account.
   // Pending / failed orders do NOT count as owned.
   const owned = orders.some(
-    (o) => o.status === "paid" && o.items.some((i) => i.gameId === game.id)
+    (o) => o.status === "paid" && o.items.some((i) => i.gameId === game.id),
   );
 
   const already = items.some((g) => g.id === game.id);
@@ -44,6 +44,14 @@ export default function GameSidebar({ game }: { game: Game }) {
     dispatch(addItem(game.id));
   };
 
+  // Owned games open the admin-provided third-party link in a new tab so the
+  // user can download and play the game.
+  const onPlay = () => {
+    if (game.downloadUrl) {
+      window.open(game.downloadUrl, "_blank", "noopener,noreferrer");
+    }
+  };
+
   return (
     <aside className="animate-fade-up lg:sticky lg:top-24 lg:self-start">
       <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-card">
@@ -56,7 +64,13 @@ export default function GameSidebar({ game }: { game: Game }) {
           {owned ? (
             // Already purchased (paid) on this account — no re-buying, just play.
             <CommonButton
-              text="Download and Play"
+              text={
+                game.downloadUrl
+                  ? "Download and Play"
+                  : "Download link coming soon"
+              }
+              onClick={onPlay}
+              disabled={!game.downloadUrl}
               variant="theme"
               className="h-11 w-full text-sm"
               Icon={DownloadIcon}
@@ -86,7 +100,16 @@ export default function GameSidebar({ game }: { game: Game }) {
 
 function DownloadIcon({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+    <svg
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
       <path d="M12 3v12" />
       <path d="m7 12 5 5 5-5" />
       <path d="M5 21h14" />
@@ -95,14 +118,32 @@ function DownloadIcon({ className }: { className?: string }) {
 }
 function CartIcon({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+    <svg
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
       <path d="M3 4h2l2.6 11.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6" />
     </svg>
   );
 }
 function CheckIcon({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+    <svg
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2.4}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
       <path d="M5 12l5 5L20 7" />
     </svg>
   );

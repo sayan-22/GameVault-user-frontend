@@ -29,6 +29,7 @@ export function mapGame(g: ApiGame): Game {
     banner: g.banner || placeholder(`${seed}-banner`, 1600, 900),
     trailer: g.trailer || "",
     heroVideo: g.heroVideo || undefined,
+    downloadUrl: g.downloadUrl || "",
     price: g.price,
     discount: g.discount,
     free: g.free,
@@ -54,7 +55,10 @@ export function mapGame(g: ApiGame): Game {
 // Validate raw wire data with zod, then map to the UI Game shape. A malformed
 // payload throws here (callers catch it) instead of corrupting the store.
 export function parseGames(raw: unknown): Game[] {
-  return z.array(gameSchema).parse(raw ?? []).map(mapGame);
+  return z
+    .array(gameSchema)
+    .parse(raw ?? [])
+    .map(mapGame);
 }
 
 export function parseGame(raw: unknown): Game {
@@ -65,7 +69,9 @@ export function parseGame(raw: unknown): Game {
 // instead of being served from a stale build/cache.
 export async function getGames(): Promise<Game[]> {
   try {
-    const res = await fetch(`${API_URL}${API_URLS.games.list}`, { cache: "no-store" });
+    const res = await fetch(`${API_URL}${API_URLS.games.list}`, {
+      cache: "no-store",
+    });
     if (!res.ok) return [];
     const body = (await res.json()) as ApiEnvelope<unknown>;
     return parseGames(body.data);
@@ -105,7 +111,7 @@ export function deriveCategories(games: Game[], max = 8): Category[] {
   }
 
   const sorted = [...byTag.values()].sort(
-    (a, b) => b.games.length - a.games.length
+    (a, b) => b.games.length - a.games.length,
   );
 
   const usedImages = new Set<string>();
@@ -113,7 +119,8 @@ export function deriveCategories(games: Game[], max = 8): Category[] {
   for (const { name, games: tagGames } of sorted) {
     if (categories.length >= max) break;
     const pick =
-      tagGames.find((g) => g.banner && !usedImages.has(g.banner)) ?? tagGames[0];
+      tagGames.find((g) => g.banner && !usedImages.has(g.banner)) ??
+      tagGames[0];
     if (pick.banner) usedImages.add(pick.banner);
     categories.push({
       name,

@@ -8,6 +8,7 @@ export type Game = {
   banner: string;
   trailer: string;
   heroVideo?: string;
+  downloadUrl: string; // third-party link where owners download/play the game
   price: number;
   discount?: number;
   free?: boolean;
@@ -26,5 +27,10 @@ export type Game = {
     minimum: Record<string, string>;
     recommended: Record<string, string>;
   };
-  reviews: Array<{ author: string; rating: number; date: string; body: string }>;
+  reviews: Array<{
+    author: string;
+    rating: number;
+    date: string;
+    body: string;
+  }>;
 };

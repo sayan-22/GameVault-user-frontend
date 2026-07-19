@@ -21,6 +21,7 @@ export const gameSchema = z.object({
   banner: z.string().default(""),
   trailer: z.string().default(""),
   heroVideo: z.string().optional(),
+  downloadUrl: z.string().default(""),
   price: z.number().default(0),
   discount: z.number().optional(),
   free: z.boolean().optional(),
