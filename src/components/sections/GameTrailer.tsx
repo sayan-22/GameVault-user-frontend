@@ -40,7 +40,7 @@ export default function GameTrailer({ src, poster }: { src: string; poster: stri
           onPause={() => setPlaying(false)}
           className="absolute inset-0 h-full w-full object-cover"
         />
-        <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-bg/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+        <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-bg/60 via-transparent to-transparent md:opacity-0 transition-opacity duration-300 md:group-hover:opacity-100" />
 
         <button type="button" aria-label={playing ? "Pause" : "Play"} onClick={toggle} className="absolute inset-0 grid place-items-center">
           {!playing && (
@@ -52,7 +52,7 @@ export default function GameTrailer({ src, poster }: { src: string; poster: stri
           )}
         </button>
 
-        <div className="absolute bottom-3 right-3 flex items-center gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+        <div className="absolute bottom-3 right-3 flex items-center gap-2 md:opacity-0 transition-opacity md:group-hover:opacity-100">
           <button
             type="button"
             onClick={toggleMute}
