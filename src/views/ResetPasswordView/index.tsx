@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { AuthCard } from "@/components/cards";
@@ -98,7 +98,7 @@ export default function ResetPasswordView({ token }: { token?: string }) {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="��������"
+          placeholder="********"
           autoComplete="new-password"
           minLength={MIN_PASSWORD}
           required
@@ -109,7 +109,7 @@ export default function ResetPasswordView({ token }: { token?: string }) {
           type="password"
           value={confirm}
           onChange={(e) => setConfirm(e.target.value)}
-          placeholder="��������"
+          placeholder="********"
           autoComplete="new-password"
           minLength={MIN_PASSWORD}
           error={error ?? undefined}
