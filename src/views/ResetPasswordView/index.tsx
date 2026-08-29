@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useSearchParams } from "next/navigation";
 import { AuthCard } from "@/components/cards";
 import { Inputfield } from "@/components/form";
 import { CommonButton } from "@/components/buttons";
@@ -10,10 +9,7 @@ import { API_URLS } from "@/lib/services/AllAPIUrls";
 
 const MIN_PASSWORD = 6;
 
-export default function ResetPasswordView() {
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token") || "";
-
+export default function ResetPasswordView({ token }: { token?: string }) {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -74,7 +70,7 @@ export default function ResetPasswordView() {
         onSubmit={async (e) => {
           e.preventDefault();
           if (password.length < MIN_PASSWORD) {
-            setError(`Password must be at least ${MIN_PASSWORD} characters`);
+            setError(Password must be at least "MIN_PASSWORD" characters);
             return;
           }
           if (password !== confirm) {
@@ -102,7 +98,7 @@ export default function ResetPasswordView() {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
+          placeholder="••••••••"
           autoComplete="new-password"
           minLength={MIN_PASSWORD}
           required
@@ -113,7 +109,7 @@ export default function ResetPasswordView() {
           type="password"
           value={confirm}
           onChange={(e) => setConfirm(e.target.value)}
-          placeholder="ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
+          placeholder="••••••••"
           autoComplete="new-password"
           minLength={MIN_PASSWORD}
           error={error ?? undefined}
