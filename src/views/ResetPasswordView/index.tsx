@@ -70,7 +70,7 @@ export default function ResetPasswordView({ token }: { token?: string }) {
         onSubmit={async (e) => {
           e.preventDefault();
           if (password.length < MIN_PASSWORD) {
-            setError(Password must be at least "MIN_PASSWORD" characters);
+            setError(`Password must be at least ${MIN_PASSWORD} characters`);
             return;
           }
           if (password !== confirm) {
@@ -98,7 +98,7 @@ export default function ResetPasswordView({ token }: { token?: string }) {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="••••••••"
+          placeholder="ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
           autoComplete="new-password"
           minLength={MIN_PASSWORD}
           required
@@ -109,7 +109,7 @@ export default function ResetPasswordView({ token }: { token?: string }) {
           type="password"
           value={confirm}
           onChange={(e) => setConfirm(e.target.value)}
-          placeholder="••••••••"
+          placeholder="ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
           autoComplete="new-password"
           minLength={MIN_PASSWORD}
           error={error ?? undefined}
