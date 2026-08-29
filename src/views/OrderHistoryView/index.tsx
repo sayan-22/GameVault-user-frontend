@@ -86,10 +86,7 @@ function OrderCard({ order }: { order: Order }) {
     <li className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-cyan-border">
       <div className="flex flex-wrap items-start justify-between gap-3 border-b border-border-soft pb-4">
         <div>
-          <p className="font-mono text-xs text-text-muted">
-            #{order._id}
-          </p>
-          <p className="mt-1 text-sm text-text-secondary">
+          <p className="text-sm text-text-secondary">
             {formatDate(order.createdAt)}
           </p>
         </div>
