@@ -1,25 +1,25 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { AuthCard } from "@/components/cards";
 import { Inputfield } from "@/components/form";
 import { CommonButton } from "@/components/buttons";
 import { apiPost } from "@/lib/services/authAxios";
 import { API_URLS } from "@/lib/services/AllAPIUrls";
 
-// Mirrors the backend contract: POST /api/user/auth/reset-password { token, password }.
-// The token arrives in the reset link the backend emails (…/reset-password?token=…)
-// and is single-use, valid for 30 minutes. Password must be at least 6 characters.
 const MIN_PASSWORD = 6;
 
-export default function ResetPasswordView({ token }: { token?: string }) {
+export default function ResetPasswordView() {
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token") || "";
+
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
   const [done, setDone] = useState(false);
 
-  // No token in the link → nothing we can reset against.
   if (!token) {
     return (
       <AuthCard
@@ -84,7 +84,6 @@ export default function ResetPasswordView({ token }: { token?: string }) {
           setError(null);
           setPending(true);
           try {
-            // POST /api/user/auth/reset-password — sets the new password.
             await apiPost(API_URLS.auth.resetPassword, { token, password });
             setDone(true);
           } catch (err) {
@@ -103,7 +102,7 @@ export default function ResetPasswordView({ token }: { token?: string }) {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="••••••••"
+          placeholder="��������"
           autoComplete="new-password"
           minLength={MIN_PASSWORD}
           required
@@ -114,14 +113,14 @@ export default function ResetPasswordView({ token }: { token?: string }) {
           type="password"
           value={confirm}
           onChange={(e) => setConfirm(e.target.value)}
-          placeholder="••••••••"
+          placeholder="��������"
           autoComplete="new-password"
           minLength={MIN_PASSWORD}
           error={error ?? undefined}
           required
         />
         <CommonButton
-          text={pending ? "Updating…" : "Reset password"}
+          text={pending ? "Updating..." : "Reset password"}
           type="submit"
           loading={pending}
           variant="theme"

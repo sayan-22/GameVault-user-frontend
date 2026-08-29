@@ -1,10 +1,10 @@
 import ResetPasswordView from "@/views/ResetPasswordView";
+import { Suspense } from "react";
 
-export default async function ResetPasswordPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ token?: string }>;
-}) {
-  const { token } = await searchParams;
-  return <ResetPasswordView token={token} />;
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<div className="min-h-[calc(100vh-4rem)] grid place-items-center">Loading...</div>}>
+      <ResetPasswordView />
+    </Suspense>
+  );
 }
